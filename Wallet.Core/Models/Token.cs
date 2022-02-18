@@ -4,7 +4,8 @@ namespace Wallet.Core.Models
 {
     public class Token
     {
-        public Guid Id { get; }
+        public Guid ID { get; set; }
+        public Guid FinanceWalletID { get; set; }
         public string Name { get; protected set; }
         public decimal Amount { get; protected set; }
         public decimal PurchasePrice { get; protected set; }
@@ -15,7 +16,7 @@ namespace Wallet.Core.Models
 
         private Token(string name, decimal amount, decimal purchasePrice)
         {
-            Id = Guid.NewGuid();
+            ID = Guid.NewGuid();
             SetName(name);
             IncreaseAmount(amount);
             SetPurchasePrice(purchasePrice);
