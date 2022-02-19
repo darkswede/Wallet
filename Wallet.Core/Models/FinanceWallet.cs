@@ -8,7 +8,7 @@ namespace Wallet.Core.Models
     {
         private ISet<Token> _tokens = new HashSet<Token>();
 
-        public Guid ID { get; set; }
+        public int ID { get; set; }
         public string Name { get; protected set; }
         public decimal StartWorth { get; private set; }
         public decimal CurrentTotalWorth { get { return CurrentTotalWorthCalculator(); } }
@@ -21,7 +21,6 @@ namespace Wallet.Core.Models
 
         public FinanceWallet(string name)
         {
-            ID = Guid.NewGuid();
             SetName(name);
         }
 
@@ -40,9 +39,9 @@ namespace Wallet.Core.Models
             Name = name;
         }
 
-        public void AddToken(string name, decimal amount, decimal purchasePrice)
+        public void AddToken(int financeWalletID, string name, decimal amount, decimal purchaseValue, decimal currentTokenValue)
         {
-            _tokens.Add(Token.Create(name, amount, purchasePrice));
+            _tokens.Add(Token.Create(financeWalletID, name, amount, purchaseValue, currentTokenValue));
         }
 
         public void RemoveToken(string name)

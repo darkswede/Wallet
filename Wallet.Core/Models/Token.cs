@@ -5,7 +5,7 @@ namespace Wallet.Core.Models
     public class Token
     {
         public Guid ID { get; set; }
-        public Guid FinanceWalletID { get; set; }
+        public int FinanceWalletID { get; set; }
         public string Name { get; protected set; }
         public decimal Amount { get; protected set; }
         public decimal PurchasePrice { get; protected set; }
@@ -14,15 +14,17 @@ namespace Wallet.Core.Models
         public decimal TotalValue { get { return Amount * CurrentTokenValue; } }
         public decimal PercentChange { get { return PercentCalculator.CalculateChange(PurchaseValue, TotalValue); } }
 
-        private Token(string name, decimal amount, decimal purchasePrice)
+        private Token(int financeWalletID, string name, decimal amount, decimal purchasePrice, decimal currentTokenValue)
         {
             ID = Guid.NewGuid();
+            FinanceWalletID = financeWalletID;
             SetName(name);
             IncreaseAmount(amount);
             SetPurchasePrice(purchasePrice);
+            SetCurrentTokenValue(currentTokenValue);
         }
 
-        public static Token Create(string name, decimal amount, decimal purchaseValue) => new Token(name, amount, purchaseValue);
+        public static Token Create(int financeWalletID, string name, decimal amount, decimal purchaseValue, decimal currentTokenValue) => new Token(financeWalletID, name, amount, purchaseValue, currentTokenValue);
 
         public void SetName(string name)
         {
