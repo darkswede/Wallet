@@ -10,7 +10,7 @@ namespace Wallet.Core.Models
 
         public int ID { get; set; }
         public string Name { get; protected set; }
-        public decimal StartWorth { get; private set; }
+        public decimal StartWorth { get; protected set; }
         public decimal CurrentTotalWorth { get { return CurrentTotalWorthCalculator(); } }
         public decimal PercentChange { get { return PercentCalculator.CalculateChange(StartWorth, CurrentTotalWorth); } }
         public IEnumerable<Token> Tokens
@@ -26,14 +26,14 @@ namespace Wallet.Core.Models
 
         public void SetName(string name)
         {
-            if (Name == name)
-            {
-                return;
-            }
-
             if (string.IsNullOrWhiteSpace(name))
             {
                 throw new Exception("wallet name cannot be empty");
+            }
+
+            if (Name == name)
+            {
+                return;
             }
 
             Name = name;
@@ -55,24 +55,26 @@ namespace Wallet.Core.Models
             _tokens.Remove(token);
         }
 
-        private void StartWorthIncrease(decimal value)
+        public void StartWorthIncrease(decimal value)
         {
-            if (value < 0)
-            {
-                throw new Exception("value cannot be negative");
-            }
+            ValidateAmount(value);
 
             StartWorth += value;
         }
 
-        private void StartWorthDecrease(decimal value)
+        public void StartWorthDecrease(decimal value)
         {
-            if (value < 0)
+            ValidateAmount(value);
+
+            StartWorth -= value;
+        }
+
+        private void ValidateAmount(decimal amount)
+        {
+            if (amount < 0)
             {
                 throw new Exception("value cannot be negative");
             }
-
-            StartWorth -= value;
         }
 
         private decimal CurrentTotalWorthCalculator()
